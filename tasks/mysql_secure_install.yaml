@@ -1,0 +1,40 @@
+---
+
+- include_vars: secret.yaml
+
+- name: Change MySQL root password
+  mysql_user:
+          login_user: root
+          login_password: "{{ mysql_root_pass }}"
+          user: root
+          host: localhost
+          password: "{{ mysql_root_pass }}"
+          check_implicit_admin: yes
+  ignore_errors: yes
+
+- name: Remove MySQL anonymous user
+  mysql_user:
+          login_user: root
+          login_password: "{{ mysql_root_pass }}"
+          user: ""
+          state: absent
+
+- name: Disable remote root login
+  mysql_user:
+          login_user: root
+          login_password: "{{ mysql_root_pass }}"
+          user: root
+          password: "{{ mysql_root_pass }}"
+          host: "{{ item }}"
+  with_items:
+          - ::1
+          - 127.0.0.1
+          - localhost
+          - "{{ ansible_fqdn }}"
+
+- name: Remove MySQL test DB
+  mysql_db:
+          login_user: root
+          login_password: "{{ mysql_root_pass }}"
+          db: test
+          state: absent

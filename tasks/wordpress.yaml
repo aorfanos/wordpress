@@ -1,0 +1,25 @@
+---
+
+- name: Fetch and unpack Wordpress tarball
+  unarchive:
+          src: http://wordpress.org/latest.tar.gz 
+          dest: "{{ web_dir }}"
+          remote_src: yes
+
+- name: Create wp-content/uploads directory
+  file:
+          path: "{{ web_dir }}/wordpress/wp-content/uploads"
+          state: directory
+
+- name: Fix ownership of Wordpress dir to Apache user
+  file:
+          path: "{{ web_dir }}"
+          owner: apache
+          group: apache
+          recurse: yes
+
+- name: Setup Wordpress configuration file
+  template:
+          src: wp-config.j2
+          dest: "{{ web_dir }}/wordpress/wp-config.php"
+  notify: Restart Apache

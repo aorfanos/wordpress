@@ -1,0 +1,30 @@
+---
+- include_vars: vars/vars.yaml
+
+- name: Install prerequisite packages
+  yum:
+          name: "{{ prereq_rhel }}"
+          state: present
+          update_cache: yes
+  when: ansible_os_family == 'RedHat'
+
+- name: Install prerequisite packages
+  apt:
+          name: "{{ prereq_deb }}"
+          state: present
+  when: ansible_os_family == 'Debian'
+
+# fix for bug https://github.com/ansible/ansible/issues/36585
+- name: Reload systemd config (fixes known bug)
+  systemd:
+          daemon-reload: yes
+
+- name: Start and enable services
+  systemd:
+          name: "{{ item }}"
+          state: started
+          enabled: yes
+  with_items:
+          - mariadb
+          - httpd
+  when: ansible_os_family == 'RedHat'

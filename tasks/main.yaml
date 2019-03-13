@@ -1,0 +1,13 @@
+---
+
+- name: Install LAMP stack (prerequisite packages)
+  include: prereq.yaml
+
+- name: Setup MySQL
+  include: dbsetup.yaml
+
+- name: Setup Wordpress
+  include: wordpress.yaml
+
+- name: Setup Apache
+  include: apachesetup.yaml

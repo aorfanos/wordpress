@@ -1,0 +1,8 @@
+---
+
+- name: Put Apache configuration file
+  template:
+          src: httpdconf.j2
+          dest: /etc/httpd/conf/httpd.conf
+          backup: yes
+  notify: Restart Apache

@@ -1,0 +1,29 @@
+---
+
+# prerequisite packages
+
+prereq_rhel:
+        - httpd
+        - mariadb-server
+        - mariadb
+        - php
+        - php-mysql
+        - php-gd
+        - MySQL-python
+
+prereq_deb:
+        - apache2
+        - mariadb-server
+        - php
+        - libapache2-mod-php
+        - php-mysql
+        - php-fpm
+
+# Wordpress DB configuration
+
+wordpress_db_name: wordpress
+wordpress_user: wordpress_user
+
+# Apache configuration
+
+web_dir: /var/www/html

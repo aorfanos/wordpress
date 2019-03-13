@@ -1,0 +1,23 @@
+---
+
+- include_vars: vars.yaml
+- include_vars: secret.yaml
+
+- name: Harden MySQL
+  include: mysql_secure_install.yaml
+
+- name: Setup Wordpress DB
+  mysql_db:
+          login_user: root
+          login_password: "{{ mysql_root_pass }}"
+          db: "{{ wordpress_db_name }}"
+          state: present
+
+- name: Setup Wordpress user
+  mysql_user:
+          login_user: root
+          login_password: "{{ mysql_root_pass }}"
+          user: "{{ wordpress_user }}"
+          state: present
+          password: "{{ wordpress_user_pass }}"
+          priv: '{{ wordpress_db_name }}.*:ALL,GRANT'
